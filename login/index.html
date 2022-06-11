@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - AskMeQA</title>
+    <link rel="stylesheet" href="/src/mdui/css/mdui.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npm.elemecdn.com/askmeqa-src@1.1.30/css/login.css">
+    <link rel="stylesheet" href="https://npm.elemecdn.com/askmeqa-src@1.1.30/css/index.css">
+</head>
+
+<body class="mdui-theme-primary-light-blue mdui-appbar-with-toolbar">
+    
+
+    <div class="main mdui-valign">
+
+        <div class="form mdui-center">
+            <!-- Title -->
+            <h2 class="mdui-text-center">登录</h2>
+            <!-- Username -->
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">&#xe853;</i>
+                <label class="mdui-textfield-label">用户名</label>
+                <input class="mdui-textfield-input" type="text" id="username" />
+
+            </div>
+            <br />
+            <!-- Password -->
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <i class="mdui-icon material-icons">&#xe897;</i>
+                <label class="mdui-textfield-label">密码</label>
+                <input class="mdui-textfield-input" type="password" id="password" />
+            </div>
+
+            <br />
+            <br />
+            <label style="display: none;" id="token"></label>
+            <!-- Login Button -->
+            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-center" id="login-btn" onclick="login();">登录</button>
+
+            <br />
+            <br />
+            <!-- Register -->
+            <div class="mdui-typo">
+                <p class="mdui-text-center">没有账号？<a href="/register/"> 点击此处 </a> 进行注册。</p>
+            </div>
+        </div>
+    </div>
+    <!-- MDUI JavaScript -->
+    <script src="/src/mdui/js/mdui.min.js"></script>
+    <script src="https://npm.elemecdn.com/askmeqa-src@1.1.30/js/bar.js" async></script>
+    <script src="https://npm.elemecdn.com/askmeqa-src@1.1.30/js/md5.min.js"></script>
+    <script src="https://recaptcha.net/recaptcha/api.js?render=6Lez3tMeAAAAAMkhcx4sMoeW8O0of6Gc-MwaGuw8"></script>
+    <script>
+        document.body.addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                login();
+            }
+        });
+        if (localStorage.getItem("login-token")) {
+            fetch("https://ask-bkend.yfun.top/check-token?username="+localStorage.getItem("username")+"&token="+localStorage.getItem("login-token")).then(res => res.text()).then((res) => {
+                if (res == "200") {
+                    window.location.href = "/";
+                } else {
+                    mdui.snackbar({
+                        message: '登录状态过期，请重新登录。'
+                    });
+                    localStorage.removeItem("login-token");
+                    localStorage.removeItem("username");
+                }
+            });
+        }
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Lez3tMeAAAAAMkhcx4sMoeW8O0of6Gc-MwaGuw8', {action: 'login'}).then(function(token) {
+                document.getElementById("token").innerText = token;
+            });
+        });
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = md5(document.getElementById("password").value);
+            const token = document.getElementById("token").innerText;
+            if (!username || !password || username.indexOf(" ") > -1 || password.indexOf(" ") > -1) {
+                mdui.snackbar({
+                    message: '用户名与密码不能为空。'
+                });
+                return false;
+            }
+            if (!token) {
+                mdui.snackbar({
+                    message: 'reCAPTCHA 加载错误。'
+                });
+                return false;
+            }
+            document.getElementById("login-btn").innerHTML = `<div class="mdui-spinner mdui-spinner-colorful"></div>`;
+            mdui.mutation();
+            fetch("https://ask-bkend.yfun.top/login", {mode: "cors", method: "POST", body: JSON.stringify({
+                username: username,
+                password: password,
+                token: token,
+            })}).then(res => res.text()).then((res) => {
+                var res = JSON.parse(res);
+                // console.log(res);
+                document.getElementById("login-btn").innerHTML = `登录`;
+                if (res.code == "captcha_error_002") {
+                    mdui.snackbar({
+                        message: '未能通过 reCAPTCHA 认证。'
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                } else if (res.code == "user_error_001") {
+                    mdui.snackbar({
+                        message: '用户名或密码错误。'
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                } else if (res.code == "ok_001") {
+                    mdui.snackbar({
+                        message: '登录成功。'
+                    });
+                    localStorage.setItem("login-token", res.token);
+                    localStorage.setItem("username", username);
+                    window.location.href = "/";
+                } else {
+                    mdui.snackbar({
+                        message: '未知的错误。'
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AskMeQA - Home</title>
+    <link rel="stylesheet" href="/src/mdui/css/mdui.min.css">
+    <link rel="stylesheet" href="https://npm.elemecdn.com/askmeqa-src@1.1.30/css/index.css">
+</head>
+<body class="mdui-theme-primary-light-blue mdui-appbar-with-toolbar">
+    <div class="mdui-progress" style="">
+        <div class="mdui-progress-indeterminate"></div>
+    </div>
+
+    <!-- User Card, 用户卡片 -->
+
+    <div class="mdui-card card">
+        <div class="mdui-card-primary">
+        <div class="mdui-card-primary-title">信息 & 留言板设置</div>
+        <div class="mdui-card-primary-subtitle">设置您的个人信息与留言板。</div>
+        </div>
+        
+    </div>
+
+    <!-- 提问 & 回答 -->
+    <div class="mdui-panel card" id="qa-panel" mdui-panel>
+        
+        <div class="mdui-textfield ">
+            <label class="mdui-textfield-label">用户昵称</label>
+            <input class="mdui-textfield-input" id="nickname" type="text"/>
+          </div>
+          <div class="mdui-textfield ">
+            <label class="mdui-textfield-label">用户信息</label>
+            <input class="mdui-textfield-input" id="intro" type="text"/>
+          </div>
+          <div class="mdui-textfield ">
+            <label class="mdui-textfield-label">用户简介</label>
+            <input class="mdui-textfield-input" id="sub" type="text"/>
+          </div>
+          <div class="mdui-textfield ">
+            <label class="mdui-textfield-label">Pushdeer 推送 API</label>
+            <input class="mdui-textfield-input" id="pushdeer" type="text"/>
+          </div>
+        <label style="display: none;" id="token"></label>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-center" style="margin: 30px;" onclick="send();" id="ask-btn">提交</button>
+
+    </div>
+    <script src="/src/mdui/js/mdui.min.js"></script>
+    <script src="https://npm.elemecdn.com/askmeqa-src@1.1.30/js/bar.js" async></script>
+    <script src="https://recaptcha.net/recaptcha/api.js?render=6Lez3tMeAAAAAMkhcx4sMoeW8O0of6Gc-MwaGuw8"></script>
+    <script>
+        if (localStorage.getItem("login-token")) {
+            fetch("https://ask-bkend.yfun.top/check-token?username="+localStorage.getItem("username")+"&token="+localStorage.getItem("login-token")).then(res => res.text()).then((res) => {
+                if (res != "200") {
+                    mdui.snackbar({
+                        message: '登录状态过期，请重新登录。'
+                    });
+                    localStorage.removeItem("login-token");
+                    localStorage.removeItem("username");
+                    window.location.href = "/login/";
+                }
+            });
+        } else {
+            window.location.href = "/login/";
+        }
+        document.getElementById("nickname").disabled = true;
+        document.getElementById("sub").disabled = true;
+        document.getElementById("ask-btn").disabled = true;
+        document.getElementById("intro").disabled = true;
+        document.getElementById("pushdeer").disabled = true;
+        
+        fetch("https://ask-bkend.yfun.top/user/profile?username="+localStorage.getItem("username")+"&token="+localStorage.getItem("login-token"), {
+            mode: "cors"
+        }).then(res => res.json()).then((res) => {
+            document.getElementsByClassName("mdui-progress")[0].style.display = "none";
+            data = res.data;
+            document.getElementById("nickname").value = data.nickname;
+            document.getElementById("sub").value = data.sub;
+            document.getElementById("intro").value = data.intro;
+            document.getElementById("pushdeer").value = data.pushdeer;
+
+            document.getElementById("nickname").disabled = false;
+            document.getElementById("sub").disabled = false;
+            document.getElementById("ask-btn").disabled = false;
+            document.getElementById("intro").disabled = false;
+            document.getElementById("pushdeer").disabled = false;
+        })
+    </script>
+    <script src="https://npm.elemecdn.com/askmeqa-src@1.1.30/js/setinfo.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+.card {
+    max-width: 650px;
+    margin: 20px auto;
+}
+.mg-top-30 {
+    margin-top: 30px;
+}
+.mg-btm-30 {
+    margin-bottom: 30px;
+}
+.meta {
+    margin: 0 auto 48px;
+    font-size: 20px;
+    opacity: .76;
+}
+.main-index {
+    padding-top: 96px;
+    padding-bottom: 64px;
+    text-align: center;
+}
+.main-index h1 {
+    margin: 0 0 24px;
+    font-weight: 400;
+    font-size: 32px;
+}
+.main-index .actions {
+    padding-top: 30px;
+}
+.main-index .actions a {
+    margin-top: 10px;
+    height: 46px;
+    margin-right: 8px;
+    margin-left: 8px;
+    padding: 0 24px;
+    color: #1a73e8;
+    font-size: 16px;
+    line-height: 46px;
+    border: 1px solid #1a73e8;
+}
+body {
+    font-family: Roboto,Noto,Helvetica,Arial,sans-serif;
+    margin: 20px;
+}
+
+.page-copyright {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 0.95rem;
+    opacity: .76;
+}
+.page-copyright * {
+    color: #000000;
+    text-decoration: none;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寻找用户 - AskMeQA</title>
+    <link rel="stylesheet" href="/src/mdui/css/mdui.min.css">
+    <link rel="stylesheet" href="https://npm.elemecdn.com/askmeqa-src@1.1.30//css/index.css">
+</head>
+<body class="mdui-theme-primary-light-blue mdui-appbar-with-toolbar">
+
+    <!-- User Card, 用户卡片 -->
+
+    <div class="mdui-card card" id="profile">
+        <!-- <div class="mdui-spinner mdui-spinner-colorful mdui-center mg-top-30 mg-btm-30"></div> -->
+        <div id="input-area" class="mdui-textfield mdui-textfield-floating-label" style="margin: 0 35px;">
+            <label class="mdui-textfield-label">用户名</label>
+            <input class="mdui-textfield-input" maxlength="35" id="username"></input>
+        </div>
+        <div id="input-area" class="mdui-textfield mdui-textfield-floating-label" style="margin: 0 35px;padding-top: 0;">
+            <label class="mdui-textfield-label">QID</label>
+            <input class="mdui-textfield-input" maxlength="35" id="qid"></input>
+        </div>
+    </div>
+
+    <!-- 提问 & 回答 -->
+    <div class="mdui-panel card" id="qa-panel" mdui-panel>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-center" style="margin: 30px;" onclick="search();">查询</button>
+    </div>
+    <div class="mdui-card card mdui-typo" id="how-to-use">
+        <div style="margin: 20px 35px;">
+            <h4>如何使用 [查询] 功能？</h4>
+            <p>在对应的输入栏中输入用户名（必填）与 QID（选填），单击查询。</p>
+        </div>
+    </div>
+
+    
+    <script src="/src/mdui/js/mdui.min.js"></script>
+    <script src="https://npm.elemecdn.com/askmeqa-src@1.1.30/js/bar.js" async></script>
+    <!-- <script src="https://recaptcha.net/recaptcha/api.js?render=6Lez3tMeAAAAAMkhcx4sMoeW8O0of6Gc-MwaGuw8"></script>
+    <script src="/src/js/getdata.js"></script>
+    <script src="/src/js/senddata.js"></script> -->
+    <script>
+        document.body.addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                search();
+            }
+        });
+        function search() {
+            const username = document.getElementById("username").value;
+            const qid = document.getElementById("qid").value;
+            window.location.href = "/u/?id="+username+"&qid="+qid;
+        }
+    </script>
+</body>
+</html>

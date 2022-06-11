@@ -1,0 +1,54 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: overlay;
+}
+::-webkit-scrollbar {
+    width: 6px;
+    height: 5px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+::-webkit-scrollbar-thumb {
+    background: rgb(194,202,204);
+    border-radius: 2px;
+    transition: .2s;
+}
+
+/* 选中 */
+
+/* ::selection {
+    background: #e6e6e6;
+    color: #000;
+} */
+
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+/* 内容文本 */
+
+.content {
+    max-width: 100%;
+    padding: 25px;
+    padding-left: 35px;
+    /* 默认是 1rem，通过 JavaScript 修改 */
+    font-size: 2.5rem;
+    font-weight: 500;
+    word-break: break-all;
+    font-family: 'Noto Sans SC', sans-serif;
+    margin-bottom: 30px;
+}
+
+.mainContent {
+    padding-bottom: 50px;
+}

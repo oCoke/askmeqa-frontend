@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>请验证您的邮箱地址</title>
+    <link rel="stylesheet" href="/src/mdui/css/mdui.min.css">
+    <link rel="stylesheet" href="https://npm.elemecdn.com/askmeqa-src@1.1.30/css/index.css">
+</head>
+<body class="mdui-theme-primary-light-blue mdui-appbar-with-toolbar">
+
+    <!-- User Card, 用户卡片 -->
+
+    <div class="mdui-card card">
+        <div class="mdui-card-primary">
+        <div class="mdui-card-primary-title">请验证您的邮箱地址</div>
+        <div class="mdui-card-primary-subtitle">您的 AskMeQA 账号已经注册成功，请验证您的邮箱地址。</div>
+        </div>
+    </div>
+
+    <div class="mdui-card card">
+        <div class="mdui-card-content">
+            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-center" id="reg-btn" onclick="verify();">验证邮箱地址</button>
+            <div id="token" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="/src/mdui/js/mdui.min.js"></script>
+    <script src="https://npm.elemecdn.com/askmeqa-src@1.1.30/js/bar.js" async></script>
+    <script src="https://recaptcha.net/recaptcha/api.js?render=6Lez3tMeAAAAAMkhcx4sMoeW8O0of6Gc-MwaGuw8"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6Lez3tMeAAAAAMkhcx4sMoeW8O0of6Gc-MwaGuw8', {action: 'send'}).then(function(token) {
+                document.getElementById("token").innerText = token;
+            });
+        });
+
+        if (localStorage.getItem("login-token")) {
+            fetch("https://ask-bkend.yfun.top/check-token?username="+localStorage.getItem("username")+"&token="+localStorage.getItem("login-token")).then(res => res.text()).then((res) => {
+                if (res != "200") {
+                    mdui.snackbar({
+                        message: '登录状态过期，请重新登录。'
+                    });
+                    localStorage.removeItem("login-token");
+                    localStorage.removeItem("username");
+                    window.location.href = "/login/";
+                }
+            });
+        } else {
+            window.location.href = "/login/";
+        }
+
+        function verify() {
+            mdui.prompt('请检查您的邮箱收件箱。如果您并未收到相关邮件，可能是被邮箱系统误判，请检查垃圾邮件箱。', '验证码',
+                function (value) {
+                    if (value.length != 6 || isNaN(value)) {
+                        mdui.snackbar({message:"您输入的不是数字。"});
+                        return false;
+                    }
+                    fetch("https://ask-bkend.yfun.top/check-email?username="+localStorage.getItem("username")+"&token="+localStorage.getItem("login-token")+"&code="+value, {
+                        method: "POST",
+                        mode: "cors",
+                        body: JSON.stringify({
+                            token: document.getElementById("token").innerText,
+                        })
+                    }).then(res => res.json()).then(res => {
+                        if (res.code == "ok_002") {
+                            mdui.snackbar({
+                                message: '注册成功：邮箱验证完成。'
+                            });
+                        } else {
+                            mdui.snackbar({
+                                message: res.text
+                            });
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        }
+                    })
+                },
+                function (value) {
+                    window.location.reload();
+                }
+            );
+            
+        }
+    </script>
+
+</body>
+</html>

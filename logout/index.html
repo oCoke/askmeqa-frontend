@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退出登录 - AskMeQA</title>
+    <link rel="stylesheet" href="/src/mdui/css/mdui.min.css">
+</head>
+
+<body class="mdui-theme-primary-light-blue mdui-appbar-with-toolbar">
+    
+
+    <div class="main mdui-valign">
+
+        <div class="form mdui-center">
+            <!-- Login Button -->
+            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-center" onclick="login();">重新登录</button>
+
+            <br />
+            <br />
+            <!-- Register -->
+            <!-- <div class="mdui-typo">
+                <p class="mdui-text-center"><a href="login.html"> 重新登录 </a></p>
+            </div> -->
+        </div>
+    </div>
+    <!-- MDUI JavaScript -->
+    <script src="/src/mdui/js/mdui.min.js"></script>
+    <script src="https://npm.elemecdn.com/askmeqa-src@1.1.30/js/bar.js" async></script>
+    <script>
+        // document.body.addEventListener("keyup", function(event) {
+        //     event.preventDefault();
+        //     if (event.keyCode === 13) {
+        //         logout();
+        //     }
+        // });
+        function logout() {
+            mdui.confirm('您确定要退出登录吗？', '退出登录',
+                function () {
+                    localStorage.removeItem("login-token");
+                    localStorage.removeItem("username");
+                    mdui.snackbar({
+                        message: '成功退出登录。'
+                    });
+                },
+                function () {
+                    // window.location.href = document.referrer;
+                    mdui.snackbar({
+                        message: '取消退出登录。'
+                    });
+                }, 
+                {
+                    confirmText: "确认",
+                    cancelText: "取消"
+                },
+            );
+
+        }
+        function login() {
+            window.location.href = "/login/";
+        }
+        logout();
+    </script>
+</body>
+</html>

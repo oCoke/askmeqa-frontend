@@ -1,0 +1,37 @@
+{
+  "_from": "askmeqa-src",
+  "_id": "askmeqa-src@1.1.29",
+  "_inBundle": false,
+  "_integrity": "sha512-msreH8AnQLC+Xx/AjhuMwM4wKSc8PRAZGshPaMtvsX1Nnrx/9d7BnxroYlS8n3d1Fr9mBJDSoPJtQLsg316QFQ==",
+  "_location": "/askmeqa-src",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "askmeqa-src",
+    "name": "askmeqa-src",
+    "escapedName": "askmeqa-src",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/askmeqa-src/-/askmeqa-src-1.1.29.tgz",
+  "_shasum": "52cdaec3f6ece8fe2acd2bf9caf048dab715d74c",
+  "_spec": "askmeqa-src",
+  "_where": "/root/workspace/frontend",
+  "author": "",
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "askmeqa-src",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.1.30"
+}
